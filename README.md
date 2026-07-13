@@ -7,7 +7,7 @@ del libro **«Magnesio: El Mineral de Dos Caras»** del Dr. Nelson Vásquez.
 
 Esta herramienta es de acceso exclusivo para lectores del libro.  
 La clave de acceso se encuentra en la última página de la obra.
-
+https://drnelsonvasquezt.github.io/magnesdual2.0
 ## Contenido
 
 - 19 indicaciones clínicas del Capítulo 5
