@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>¿Qué tan desequilibrado está tu organismo? | Instituto Vander</title>
+<style>
+  :root{
+    --bg: #eef9f6;
+    --bg-card: #ffffff;
+    --teal-900: #0d3d3a;
+    --teal-700: #1a6f68;
+    --teal-500: #2ea89a;
+    --teal-300: #7fd9c9;
+    --teal-100: #e3f7f1;
+    --pink: #d6447a;
+    --pink-soft: #e97fa4;
+    --text: #163832;
+    --text-muted: #6b8884;
+    --border: #d9ece8;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background: radial-gradient(circle at 50% 0%, #f5fffc 0%, var(--bg) 60%);
+    color: var(--text);
+    font-family: 'Georgia', 'Times New Roman', serif;
+    min-height: 100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding: 24px;
+  }
+  .app{
+    width:100%;
+    max-width: 640px;
+  }
+  .card{
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 40px 32px;
+    box-shadow: 0 20px 60px rgba(13,61,58,0.12);
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before{
+    content:"";
+    position:absolute;
+    top:-40%; left:-20%;
+    width:140%; height:140%;
+    background: radial-gradient(circle, rgba(46,168,154,0.08) 0%, transparent 60%);
+    pointer-events:none;
+  }
+  .eyebrow{
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 11px;
+    color: var(--pink);
+    text-align:center;
+    margin-bottom: 10px;
+  }
+  h1{
+    font-size: 26px;
+    text-align:center;
+    line-height:1.3;
+    margin-bottom: 14px;
+    color: var(--teal-900);
+  }
+  .sub{
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    text-align:center;
+    color: var(--text-muted);
+    font-size: 14.5px;
+    line-height:1.6;
+    margin-bottom: 28px;
+  }
+  .gold-line{
+    width:60px; height:2px; background: var(--teal-500); margin: 0 auto 28px auto; opacity:0.7;
+  }
+  button{
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    cursor:pointer;
+    border:none;
+  }
+  .btn-start{
+    display:block;
+    width:100%;
+    background: linear-gradient(135deg, var(--teal-300), var(--teal-700));
+    color:#ffffff;
+    font-weight:700;
+    font-size:15px;
+    letter-spacing: 0.5px;
+    padding:16px;
+    border-radius:10px;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .btn-start:hover{ transform: translateY(-1px); box-shadow: 0 8px 24px rgba(46,168,154,0.3); }
+
+  .disclaimer{
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size:11.5px;
+    color: var(--text-muted);
+    text-align:center;
+    margin-top:22px;
+    line-height:1.5;
+    opacity:0.85;
+  }
+
+  /* contraseña */
+  .pw-input{
+    width:100%;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size:16px;
+    letter-spacing:1px;
+    text-align:center;
+    padding:14px 16px;
+    border-radius:10px;
+    border:1px solid var(--border);
+    background:#fbfffe;
+    color: var(--text);
+    margin-bottom: 14px;
+  }
+  .pw-input:focus{ outline:none; border-color: var(--teal-500); }
+  .pw-error{
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size:12.5px;
+    color: var(--pink);
+    text-align:center;
+    margin-top:-4px;
+    margin-bottom:14px;
+    min-height:16px;
+  }
+
+  /* progress */
+  .progress-wrap{
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    display:flex; align-items:center; gap:10px; margin-bottom:26px;
+  }
+  .progress-bar{
+    flex:1; height:4px; background:var(--border); border-radius:4px; overflow:hidden;
+  }
+  .progress-fill{
+    height:100%; background: linear-gradient(90deg, var(--teal-300), var(--teal-700)); width:0%; transition: width 0.3s ease;
+  }
+  .progress-label{
+    font-size:12px; color:var(--text-muted); white-space:nowrap;
+  }
+
+  .axis-tag{
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    text-transform:uppercase;
+    letter-spacing:1.5px;
+    font-size:11px;
+    color: var(--teal-500);
+    text-align:center;
+    margin-bottom: 14px;
+  }
+  .question{
+    font-size: 21px;
+    text-align:center;
+    line-height:1.45;
+    margin-bottom: 30px;
+    min-height: 90px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color: var(--teal-900);
+  }
+  .options{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .opt{
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    background: #fbfffe;
+    border: 1px solid var(--border);
+    color: var(--text);
+    text-align:left;
+    padding: 14px 18px;
+    border-radius: 10px;
+    font-size: 14.5px;
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+  .opt:hover{ border-color: var(--teal-500); background: var(--teal-100); }
+  .opt .dot{
+    display:inline-block;
+    width:8px;height:8px;border-radius:50%;
+    margin-right:10px;
+    background: var(--teal-300);
+    vertical-align:middle;
+  }
+
+  .nav-row{
+    display:flex; justify-content:space-between; margin-top:26px;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+  }
+  .back-btn{
+    background:none; color:var(--text-muted); font-size:13px;
+  }
+  .back-btn:hover{ color: var(--teal-500); }
+
+  /* results */
+  .result-profile{
+    text-align:center;
+    margin-bottom: 8px;
+  }
+  .result-name{
+    color: var(--pink);
+    font-size: 24px;
+    margin: 6px 0 14px;
+  }
+  .result-desc{
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 14.5px;
+    color: var(--text);
+    line-height:1.7;
+    text-align:center;
+    margin-bottom: 28px;
+  }
+  .bars{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    margin-bottom: 30px;
+  }
+  .bar-row{
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+  }
+  .bar-label{
+    display:flex; justify-content:space-between;
+    font-size:12.5px; color: var(--text-muted); margin-bottom:6px;
+  }
+  .bar-label b{ color: var(--teal-900); }
+  .bar-track{
+    height:8px; background: var(--teal-100); border-radius:6px; overflow:hidden;
+  }
+  .bar-fill{
+    height:100%; border-radius:6px;
+    background: linear-gradient(90deg, var(--teal-300), var(--teal-700));
+    width:0%;
+    transition: width 0.8s ease;
+  }
+  .bar-fill.dominant{
+    background: linear-gradient(90deg, var(--pink-soft), var(--pink));
+  }
+
+  .cta-box{
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding: 22px 20px;
+    text-align:center;
+    background: var(--teal-100);
+    margin-top: 10px;
+  }
+  .cta-box p{
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 13.5px;
+    color: var(--teal-900);
+    margin-bottom: 16px;
+    line-height:1.6;
+  }
+  .restart-link{
+    display:block;
+    text-align:center;
+    margin-top: 18px;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 12.5px;
+    color: var(--text-muted);
+    background:none;
+    width:100%;
+  }
+  .restart-link:hover{ color: var(--teal-500); }
+
+  .hidden{ display:none; }
+
+  @media (max-width: 480px){
+    .card{ padding: 30px 20px; }
+    h1{ font-size: 22px; }
+    .question{ font-size: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <div class="card" id="card">
+
+    <!-- CONTRASEÑA -->
+    <div id="screen-password">
+      <div class="eyebrow">Instituto Vander</div>
+      <h1>Acceso al test de autoevaluación</h1>
+      <div class="gold-line"></div>
+      <p class="sub">
+        Este contenido es exclusivo para quienes asistieron a la clase gratuita de Naturopatía.
+        Ingresa la contraseña que se compartió durante la clase para continuar.
+      </p>
+      <input type="password" id="pwInput" class="pw-input" placeholder="Contraseña" autocomplete="off">
+      <div class="pw-error" id="pwError"></div>
+      <button class="btn-start" onclick="checkPassword()">Ingresar →</button>
+    </div>
+
+    <!-- INTRO -->
+    <div id="screen-intro" class="hidden">
+      <div class="eyebrow">Instituto Vander</div>
+      <h1>¿Qué tan desequilibrado está tu organismo?</h1>
+      <div class="gold-line"></div>
+      <p class="sub">
+        Un recorrido completo por los 11 ejes que trabaja la Naturopatía: digestivo, energético,
+        hormonal, nervioso, depurativo, metabólico, cortisol, renal, circulatorio, respiratorio
+        y musculoesquelético. En unos 8 a 10 minutos vas a descubrir cuál es tu eje de mayor
+        desequilibrio en este momento.
+      </p>
+      <button class="btn-start" onclick="startQuiz()">Comenzar mi test →</button>
+      <p class="disclaimer">
+        Este test es educativo y de autoconocimiento. No es un diagnóstico médico ni reemplaza
+        la consulta con un profesional de la salud.
+      </p>
+    </div>
+
+    <!-- QUIZ -->
+    <div id="screen-quiz" class="hidden">
+      <div class="progress-wrap">
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+        <div class="progress-label" id="progressLabel">1 / 44</div>
+      </div>
+      <div class="axis-tag" id="axisTag"></div>
+      <div class="question" id="questionText"></div>
+      <div class="options" id="optionsWrap"></div>
+      <div class="nav-row">
+        <button class="back-btn" id="backBtn" onclick="goBack()">← Volver</button>
+        <span></span>
+      </div>
+    </div>
+
+    <!-- RESULTS -->
+    <div id="screen-result" class="hidden">
+      <div class="eyebrow">Tu resultado</div>
+      <div class="result-profile">
+        <div class="sub" style="margin-bottom:0;">Tu eje de mayor desequilibrio es:</div>
+        <div class="result-name" id="resultName"></div>
+      </div>
+      <p class="result-desc" id="resultDesc"></p>
+
+      <div class="bars" id="barsWrap"></div>
+
+      <div class="cta-box">
+        <p id="ctaText"></p>
+      </div>
+
+      <button class="restart-link" onclick="resetQuiz()">↺ Volver a hacer el test</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ---- Acceso ----
+const APP_PASSWORD = "NATUROPATIA2026";
+
+function checkPassword(){
+  const input = document.getElementById('pwInput');
+  const value = input.value.trim().toUpperCase();
+  if(value === APP_PASSWORD){
+    document.getElementById('screen-password').classList.add('hidden');
+    document.getElementById('screen-intro').classList.remove('hidden');
+  } else {
+    document.getElementById('pwError').textContent = 'Contraseña incorrecta. Intenta nuevamente.';
+  }
+}
+document.getElementById('pwInput').addEventListener('keydown', function(e){
+  if(e.key === 'Enter'){ checkPassword(); }
+});
+
+// ---- Contenido del test ----
+const AXES = [
+  {
+    key: "digestivo",
+    label: "Eje Digestivo",
+    name: "Desequilibrio Digestivo",
+    desc: "Tu organismo está mostrando señales de que el sistema digestivo necesita atención: la forma en que absorbes y procesas los alimentos está afectando tu energía y bienestar general más de lo que parece.",
+    cta: "En el Diplomado de Naturopatía profundizamos exactamente en esto: cómo identificar y trabajar los desequilibrios digestivos desde un enfoque natural e integral.",
+    questions: [
+      "Sientes hinchazón o pesadez después de comer",
+      "Notas reacciones a ciertos alimentos (intolerancias, molestias)",
+      "Tu tránsito intestinal es irregular",
+      "Sientes fatiga o pesadez mental después de las comidas"
+    ]
+  },
+  {
+    key: "energetico",
+    label: "Eje Energético",
+    name: "Desequilibrio Energético / Suprarrenal",
+    desc: "Tu cuerpo está pidiendo a gritos un sostén para su energía vital. Esto suele estar relacionado con el funcionamiento de las glándulas suprarrenales y la forma en que manejas el estrés diario.",
+    cta: "En el Diplomado vas a aprender a identificar el agotamiento suprarrenal y a trabajar protocolos naturales para recuperar la energía de forma sostenida.",
+    questions: [
+      "Te cuesta levantarte con energía por la mañana",
+      "Dependes de café u otros estimulantes para funcionar",
+      "Sientes cansancio que no mejora con el descanso",
+      "Notas caídas de energía a media tarde"
+    ]
+  },
+  {
+    key: "hormonal",
+    label: "Eje Hormonal",
+    name: "Desequilibrio Hormonal",
+    desc: "Hay señales de que tu sistema hormonal está pidiendo equilibrio. Esto puede estar influyendo en tu peso, tu estado de ánimo y tus ciclos de energía más de lo que imaginas.",
+    cta: "El Diplomado dedica un módulo completo a entender y abordar los desequilibrios hormonales desde la naturopatía y la nutrición natural.",
+    questions: [
+      "Notas cambios de peso que no puedes explicar fácilmente",
+      "Tienes antojos frecuentes de azúcar o harinas",
+      "Tu ciclo o tus niveles de energía son irregulares",
+      "Notas cambios de humor marcados en ciertos momentos del mes o del día"
+    ]
+  },
+  {
+    key: "nervioso",
+    label: "Eje Nervioso / Emocional",
+    name: "Desequilibrio Nervioso y Emocional",
+    desc: "Tu sistema nervioso está mostrando señales de sobrecarga. El estrés sostenido y la dificultad para descansar profundamente están pidiendo una intervención natural y consciente.",
+    cta: "En el Diplomado abordamos herramientas naturopáticas concretas para regular el sistema nervioso y mejorar la calidad del descanso.",
+    questions: [
+      "Te cuesta conciliar el sueño o descansar profundamente",
+      "Te sientes ansioso/a o irritable con frecuencia",
+      "Tu mente sigue 'acelerada' incluso cuando quieres descansar",
+      "Sientes que el estrés diario te supera con facilidad"
+    ]
+  },
+  {
+    key: "depurativo",
+    label: "Eje Depurativo",
+    name: "Desequilibrio Depurativo / Carga Tóxica",
+    desc: "Tu organismo está señalando que sus vías naturales de limpieza (hígado, piel, riñones) podrían estar sobrecargadas. Esto suele manifestarse en la piel y en una sensación general de 'cuerpo pesado'.",
+    cta: "El Diplomado enseña protocolos naturopáticos de depuración segura y progresiva para apoyar estas vías de eliminación.",
+    questions: [
+      "Tu piel reacciona con frecuencia (brotes, sequedad, irritación)",
+      "Sientes retención de líquidos con frecuencia",
+      "Tienes dolores de cabeza frecuentes sin causa clara",
+      "Sientes el cuerpo 'pesado' o hinchado de forma habitual"
+    ]
+  },
+  {
+    key: "metabolico",
+    label: "Eje Metabólico",
+    name: "Desequilibrio Metabólico",
+    desc: "Tu metabolismo está dando señales de que necesita apoyo: el manejo de la energía de los alimentos y la regulación del azúcar en sangre parecen estar más lentos o inestables de lo ideal.",
+    cta: "En el Diplomado vas a aprender protocolos naturopáticos para apoyar un metabolismo eficiente y estabilizar la energía que te dan los alimentos.",
+    questions: [
+      "Te resulta difícil bajar de peso aunque cuides tu alimentación",
+      "Sientes bajones de energía o 'mente nublada' después de comer azúcares o harinas",
+      "Notas que tu metabolismo se siente más lento que antes",
+      "Tienes antojos frecuentes de dulce o necesidad de comer cada pocas horas"
+    ]
+  },
+  {
+    key: "cortisol",
+    label: "Eje Cortisol",
+    name: "Desequilibrio de Cortisol",
+    desc: "Tu cuerpo muestra señales de que el cortisol, la hormona del estrés, está desregulado. Esto suele manifestarse en cómo almacenas grasa, cómo descansas y cómo reaccionas frente al estrés diario.",
+    cta: "El Diplomado incluye un módulo específico sobre el manejo natural del cortisol y el estrés crónico, con protocolos prácticos de regulación.",
+    questions: [
+      "Acumulas grasa principalmente en la zona abdominal aunque cuides tu alimentación",
+      "Te despiertas más cansado/a de lo que te acostaste",
+      "Reaccionas de forma intensa o desproporcionada ante el estrés cotidiano",
+      "Notas que el estrés se te instala en el cuerpo (tensión, mandíbula apretada, contracturas)"
+    ]
+  },
+  {
+    key: "renal",
+    label: "Eje Renal",
+    name: "Desequilibrio Renal",
+    desc: "Hay señales de que tus órganos de filtrado, los riñones, podrían necesitar apoyo. El equilibrio de líquidos y la eliminación de desechos son clave para la vitalidad general.",
+    cta: "En el Diplomado vas a aprender a reconocer señales tempranas de desequilibrio renal y a apoyar esta función con herramientas naturopáticas.",
+    questions: [
+      "Notas cambios en el color o el olor habitual de tu orina",
+      "Sientes necesidad de orinar con mucha frecuencia, o por el contrario, muy poca",
+      "Tienes hinchazón en tobillos, manos o párpados al despertar",
+      "Sientes dolor o molestia en la zona lumbar baja sin causa mecánica clara"
+    ]
+  },
+  {
+    key: "circulatorio",
+    label: "Eje Circulatorio",
+    name: "Desequilibrio Circulatorio",
+    desc: "Tu sistema circulatorio está mostrando señales de que la sangre no está fluyendo con toda la eficiencia posible, lo que puede afectar tu energía, tus extremidades y tu bienestar general.",
+    cta: "El Diplomado aborda protocolos naturales para apoyar la circulación y la salud cardiovascular desde la naturopatía.",
+    questions: [
+      "Tienes manos o pies fríos con frecuencia",
+      "Notas hormigueo, pesadez o várices en las piernas",
+      "Sientes mareos o cambios bruscos al pararte rápido",
+      "Te han mencionado que tu presión arterial fluctúa o es irregular"
+    ]
+  },
+  {
+    key: "respiratorio",
+    label: "Eje Respiratorio",
+    name: "Desequilibrio Respiratorio",
+    desc: "Tu sistema respiratorio está señalando que podría necesitar más amplitud y apoyo. La forma en que respiras influye directamente en tu nivel de estrés y de oxigenación general.",
+    cta: "En el Diplomado vas a aprender técnicas naturopáticas de respiración y apoyo respiratorio natural.",
+    questions: [
+      "Notas que tu respiración es corta o superficial la mayor parte del día",
+      "Tienes congestión nasal o mucosidad frecuente sin estar resfriado/a",
+      "Sientes falta de aire o pesadez en el pecho ante un esfuerzo leve",
+      "Respiras por la boca con frecuencia, incluso mientras duermes"
+    ]
+  },
+  {
+    key: "musculoesqueletico",
+    label: "Eje Musculoesquelético",
+    name: "Desequilibrio Musculoesquelético",
+    desc: "Tu cuerpo está mostrando señales de tensión o inflamación en músculos y articulaciones, algo que suele estar conectado con otros desequilibrios internos más que ser solo un tema mecánico.",
+    cta: "El Diplomado enseña a leer el cuerpo desde la naturopatía, conectando las señales musculoesqueléticas con su origen más profundo.",
+    questions: [
+      "Sientes rigidez o dolor articular, especialmente al despertar",
+      "Notas contracturas o tensión muscular crónica (cuello, espalda, hombros)",
+      "Tienes crujidos o molestias articulares al moverte",
+      "Sientes que tu postura o movilidad ha empeorado en los últimos años"
+    ]
+  }
+];
+
+const OPTION_LABELS = ["Nunca", "A veces", "Frecuentemente", "Siempre"];
+
+// Construye la lista plana de preguntas con referencia a su eje
+let FLAT_QUESTIONS = [];
+AXES.forEach((axis, axisIdx) => {
+  axis.questions.forEach((q, qIdx) => {
+    FLAT_QUESTIONS.push({ axisIdx, text: q });
+  });
+});
+
+let currentIndex = 0;
+let answers = []; // paralelo a FLAT_QUESTIONS, valores 0-3 o null
+
+function startQuiz(){
+  answers = new Array(FLAT_QUESTIONS.length).fill(null);
+  currentIndex = 0;
+  document.getElementById('screen-intro').classList.add('hidden');
+  document.getElementById('screen-quiz').classList.remove('hidden');
+  renderQuestion();
+}
+
+function renderQuestion(){
+  const q = FLAT_QUESTIONS[currentIndex];
+  const axis = AXES[q.axisIdx];
+
+  document.getElementById('axisTag').textContent = axis.label;
+  document.getElementById('questionText').textContent = q.text;
+
+  const pct = Math.round(((currentIndex) / FLAT_QUESTIONS.length) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent = (currentIndex+1) + ' / ' + FLAT_QUESTIONS.length;
+
+  document.getElementById('backBtn').style.visibility = currentIndex === 0 ? 'hidden' : 'visible';
+
+  const wrap = document.getElementById('optionsWrap');
+  wrap.innerHTML = '';
+  OPTION_LABELS.forEach((label, val) => {
+    const btn = document.createElement('button');
+    btn.className = 'opt';
+    btn.innerHTML = '<span class="dot"></span>' + label;
+    btn.onclick = () => selectAnswer(val);
+    wrap.appendChild(btn);
+  });
+}
+
+function selectAnswer(val){
+  answers[currentIndex] = val;
+  if(currentIndex < FLAT_QUESTIONS.length - 1){
+    currentIndex++;
+    renderQuestion();
+  } else {
+    showResults();
+  }
+}
+
+function goBack(){
+  if(currentIndex > 0){
+    currentIndex--;
+    renderQuestion();
+  }
+}
+
+function showResults(){
+  // suma puntajes por eje
+  const scores = AXES.map(() => 0);
+  FLAT_QUESTIONS.forEach((q, i) => {
+    scores[q.axisIdx] += (answers[i] || 0);
+  });
+  const maxPerAxis = AXES[0].questions.length * 3; // 4 preguntas x 3 pts max
+
+  let dominantIdx = 0;
+  scores.forEach((s, i) => { if(s > scores[dominantIdx]) dominantIdx = i; });
+
+  const dominant = AXES[dominantIdx];
+
+  document.getElementById('resultName').textContent = dominant.name;
+  document.getElementById('resultDesc').textContent = dominant.desc;
+  document.getElementById('ctaText').textContent = dominant.cta;
+
+  const barsWrap = document.getElementById('barsWrap');
+  barsWrap.innerHTML = '';
+  AXES.forEach((axis, i) => {
+    const pct = Math.round((scores[i] / maxPerAxis) * 100);
+    const row = document.createElement('div');
+    row.className = 'bar-row';
+    row.innerHTML = `
+      <div class="bar-label"><span>${axis.label}</span><b>${pct}%</b></div>
+      <div class="bar-track"><div class="bar-fill ${i===dominantIdx?'dominant':''}" style="width:0%" data-pct="${pct}"></div></div>
+    `;
+    barsWrap.appendChild(row);
+  });
+
+  document.getElementById('screen-quiz').classList.add('hidden');
+  document.getElementById('screen-result').classList.remove('hidden');
+
+  // animar barras
+  setTimeout(() => {
+    document.querySelectorAll('.bar-fill').forEach(el => {
+      el.style.width = el.getAttribute('data-pct') + '%';
+    });
+  }, 50);
+}
+
+function resetQuiz(){
+  document.getElementById('screen-result').classList.add('hidden');
+  document.getElementById('screen-intro').classList.remove('hidden');
+}
+</script>
+
+</body>
+</html>
